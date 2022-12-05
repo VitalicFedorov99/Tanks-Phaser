@@ -14,7 +14,7 @@ public class TankShooting : MonoBehaviourPunCallbacks, IPunObservable
     public float m_MinLaunchForce = 15f;        // The force given to the shell if the fire button is not held.
     public float m_MaxLaunchForce = 30f;        // The force given to the shell if the fire button is held for the max charge time.
     public float m_MaxChargeTime = 0.75f;       // How long the shell can charge for before it is fired at max force.
-
+    public GameObject Test1;
 
     private string m_FireButton;                // The input axis that is used for launching shells.
     private float m_CurrentLaunchForce;         // The force that will be given to the shell when the fire button is released.
@@ -99,7 +99,7 @@ public class TankShooting : MonoBehaviourPunCallbacks, IPunObservable
         // Create an instance of the shell and store a reference to it's rigidbody.
         var shellInstance1 =
             PhotonNetwork.Instantiate(m_Shell.name, m_FireTransform.position, m_FireTransform.rotation);
-
+        //var Test = PhotonNetwork.Instantiate(Test1.name, m_FireTransform.position, m_FireTransform.rotation);
          var shellInstance = shellInstance1.GetComponent<Rigidbody>();
         // Set the shell's velocity to the launch force in the fire position's forward direction.
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward; ;

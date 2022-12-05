@@ -47,7 +47,7 @@ public class ShellExplosion : MonoBehaviourPunCallbacks, IPunObservable
             float damage = CalculateDamage(targetRigidbody.position);
 
             // Deal this damage to the tank.
-            targetHealth.TakeDamage(damage);
+            targetHealth.TakeDamage(10);
         }
 
         // Unparent the particles from the shell.
