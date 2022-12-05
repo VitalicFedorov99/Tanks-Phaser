@@ -14,6 +14,7 @@ public class PunGameManager : MonoBehaviourPunCallbacks
     private GameObject playerPrefab;
 
     [SerializeField] public Transform[] _spawnPoint;
+    
     private List<GameObject> _tanks;
     private void Awake()
     {
@@ -31,7 +32,9 @@ public class PunGameManager : MonoBehaviourPunCallbacks
 
             Debug.LogError(PhotonNetwork.CurrentRoom.PlayerCount);
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            var tank = PhotonNetwork.Instantiate(this.playerPrefab.name, _spawnPoint[PhotonNetwork.CurrentRoom.PlayerCount - 1].position, _spawnPoint[PhotonNetwork.CurrentRoom.PlayerCount - 1].rotation, 0);
+            // var tank = PhotonNetwork.Instantiate(this.playerPrefab.name, _spawnPoint[PhotonNetwork.CurrentRoom.PlayerCount - 1].position, _spawnPoint[PhotonNetwork.CurrentRoom.PlayerCount - 1].rotation, 0);
+            var rand = Random.Range(0, _spawnPoint.Length);
+            var tank = PhotonNetwork.Instantiate(this.playerPrefab.name, _spawnPoint[rand].position, _spawnPoint[rand].rotation, 0);
             //tank.GetComponent<MeshRenderer>().material.color = Color.green;  
         }
         else
@@ -62,7 +65,7 @@ public class PunGameManager : MonoBehaviourPunCallbacks
         {
             Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient);
 
-            playerPrefab.GetComponent<MeshRenderer>().material.color = Color.blue;
+            //playerPrefab.GetComponent<MeshRenderer>().material.color = Color.blue;
             //LoadArena();
         }
     }

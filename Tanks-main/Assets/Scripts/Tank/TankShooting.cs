@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class TankShooting : MonoBehaviourPunCallbacks, IPunObservable
 {
     public int m_PlayerNumber = 1;              // Used to identify the different players.
-    public Rigidbody m_Shell;                   // Prefab of the shell.
+    public GameObject m_Shell;                   // Prefab of the shell.
     public Transform m_FireTransform;           // A child of the tank where the shells are spawned.
     public Slider m_AimSlider;                  // A child of the tank that displays the current launch force.
     public AudioSource m_ShootingAudio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
@@ -97,9 +97,10 @@ public class TankShooting : MonoBehaviourPunCallbacks, IPunObservable
         m_Fired = true;
 
         // Create an instance of the shell and store a reference to it's rigidbody.
-        Rigidbody shellInstance =
-            Instantiate(m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
+        var shellInstance1 =
+            PhotonNetwork.Instantiate(m_Shell.name, m_FireTransform.position, m_FireTransform.rotation);
 
+         var shellInstance = shellInstance1.GetComponent<Rigidbody>();
         // Set the shell's velocity to the launch force in the fire position's forward direction.
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward; ;
 
@@ -113,6 +114,15 @@ public class TankShooting : MonoBehaviourPunCallbacks, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(m_Fired);
+        }
+        else
+        {
+            // Network player, receive data
+            this.m_Fired = (bool)stream.ReceiveNext();
+        }
     }
 }
